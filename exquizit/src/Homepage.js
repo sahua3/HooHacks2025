@@ -11,7 +11,7 @@ function HomePage() {
         <img src={bunny} width="400" height="200" /> 
 
         <div className="body">
-          <Button btnTxt={'PLAY'}/>
+          <Button btnTxt={'PLAY'} route="/Quiz"/>
           <Button btnTxt={'HOW TO PLAY'}/>
             <div className="footer">
                 <p>Made with ❤️ by the ExQuizit Team</p>

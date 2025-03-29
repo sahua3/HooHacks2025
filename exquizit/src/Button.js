@@ -1,18 +1,21 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function Button({btnTxt}) {
+function Button({ btnTxt, route }) {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    alert('Button clicked!');
+    if (route) {
+      navigate(route); // Navigate to the specified route
+    } else {
+      alert('Button clicked!');
+    }
   };
 
   return (
-    <>
     <button onClick={handleClick}>
       {btnTxt}
     </button>
-    </>
-    
-
   );
 }
 
