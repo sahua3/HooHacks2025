@@ -1,4 +1,3 @@
-import logoTemp from './assets/templogo.jpeg'
 import bunny from './assets/bunny.png';
 import React from 'react';
 import './Homepage.css';
@@ -12,9 +11,9 @@ function HomePage() {
 
         <div className="body">
           <Button btnTxt={'PLAY'} route="/Quiz"/>
-          <Button btnTxt={'HOW TO PLAY'}/>
+          <Button btnTxt={'HOW TO PLAY'} route="/instructions"/>
             <div className="footer">
-                <p>Made with ♡ by the ExQuizit Team</p>
+                <p>Made with ♡ by the exQuizit Team</p>
             </div>
         </div>
         

@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './index.css';
 import HomePage from './Homepage';
 import Quiz from './Quiz';
+import Instructions from './Instructions';
 
 export default function Index() {
   return (
@@ -11,6 +12,7 @@ export default function Index() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="quiz" element={<Quiz />} />
+        <Route path="instructions" element={<Instructions />} />
       </Routes>
     </BrowserRouter>
   );
