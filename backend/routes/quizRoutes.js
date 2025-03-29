@@ -1,4 +1,6 @@
 import express from "express";
+import Question from "../models/Question.js";
+import QuizResult from "../models/QuizResult.js";
 import { saveQuizResult, getUserResults } from "../controllers/quizController.js";
 
 const router = express.Router();

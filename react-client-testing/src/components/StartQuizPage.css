@@ -1,0 +1,64 @@
+/* Layout container */
+.start-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  /* Header */
+  .start-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  /* Topic selection area fills most of the page */
+  .topic-buttons {
+    flex-grow: 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    padding: 2rem 0;
+  }
+  
+  .topic-btn {
+    width: 80%;
+    max-width: 500px;
+    padding: 2rem;
+    font-size: 1.8rem;
+    background-color: #007bff;
+    color: black;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .topic-btn:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Start Quiz button at the bottom */
+  .start-quiz-btn {
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .start-quiz-btn:hover {
+    background-color: #218838;
+  }
+  
