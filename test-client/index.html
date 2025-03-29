@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>exQuizit – Test Quiz</title>
+</head>
+<body>
+  <h1>🧠 exQuizit Mini Quiz</h1>
+
+  <form id="quiz-form">
+    <label for="userId">User ID:</label><br>
+    <input type="text" id="userId" value="123456789012345678901234" /><br><br>
+
+    <label for="topic">Topic:</label><br>
+    <select id="topic">
+      <option value="Math">Math</option>
+      <option value="Science">Science</option>
+      <option value="History">History</option>
+    </select><br><br>
+
+    <button type="button" onclick="loadQuestions()">Start Quiz</button>
+  </form>
+
+  <div id="quiz-container"></div>
+  <button id="submit-quiz" style="display:none;" onclick="submitQuiz()">Submit Quiz</button>
+
+  <pre id="response"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html>
