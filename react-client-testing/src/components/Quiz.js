@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import "./Quiz.css"; // ✅ Import the CSS for layout
+import "./Quiz.css";
 
-const Quiz = () => {
-  const [topic, setTopic] = useState("Math");
+const Quiz = ({ topic }) => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState(null);
@@ -11,6 +10,10 @@ const Quiz = () => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
   const [aiExplanation, setAiExplanation] = useState("");
+
+  useEffect(() => {
+    loadQuestions();
+  }, [topic]);
 
   const loadQuestions = async () => {
     try {
@@ -64,30 +67,29 @@ const Quiz = () => {
   const handleAnswerSubmit = async () => {
     const question = questions[currentQuestionIndex];
     const userAnswer = answers[question._id];
-  
+
     try {
       const res = await fetch("/api/questions/check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ questionId: question._id, userAnswer })
       });
-  
+
       const data = await res.json();
-  
+
       setCurrentResult({
         questionId: question._id,
         userAnswer,
         correctAnswer: data.correctAnswer,
         correct: data.correct
       });
-  
+
       setShowFeedback(true);
     } catch (err) {
       console.error("Error checking answer:", err);
       alert("Couldn't check your answer.");
     }
   };
-  
 
   const handleNextQuestion = () => {
     setShowFeedback(false);
@@ -124,21 +126,6 @@ const Quiz = () => {
   return (
     <div>
       <h2>exQuizit: Take a Quiz</h2>
-
-      <div className="topic-buttons">
-        {["Math", "Science", "History"].map(t => (
-          <button
-            key={t}
-            className={`topic-btn ${topic === t ? "active" : ""}`}
-            onClick={() => setTopic(t)}
-          >
-            {t}
-          </button>
-        ))}
-      </div>
-
-
-      <button onClick={loadQuestions}>Start Quiz</button>
 
       <div id="quiz-container">
         <AnimatePresence mode="wait">
