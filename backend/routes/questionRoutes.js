@@ -15,11 +15,13 @@ router.get("/", async (req, res) => {
     ]);
 
     const safeQuestions = questions.map(q => ({
-      _id: q._id,
-      topic: q.topic,
-      questionText: q.questionText,
-      choices: q.choices
-    }));
+        _id: q._id,
+        topic: q.topic,
+        questionText: q.questionText,
+        choices: q.choices,
+        correctAnswer: q.correctAnswer // 👈 Add this line TEMPORARILY
+      }));
+      
 
     res.json(safeQuestions);
   } catch (err) {
