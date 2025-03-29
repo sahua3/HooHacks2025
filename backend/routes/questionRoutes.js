@@ -18,12 +18,34 @@ router.get("/", async (req, res) => {
         _id: q._id,
         topic: q.topic,
         questionText: q.questionText,
-        choices: q.choices,
-        correctAnswer: q.correctAnswer // 👈 Add this line TEMPORARILY
+        choices: q.choices
       }));
       
 
     res.json(safeQuestions);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/check", async (req, res) => {
+  try {
+    const { questionId, userAnswer } = req.body;
+    if (!questionId || !userAnswer) {
+      return res.status(400).json({ error: "Missing questionId or userAnswer" });
+    }
+
+    const question = await Question.findById(questionId);
+    if (!question) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    const isCorrect = question.correctAnswer === userAnswer;
+
+    res.json({
+      correct: isCorrect,
+      correctAnswer: question.correctAnswer
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
