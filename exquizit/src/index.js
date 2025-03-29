@@ -11,11 +11,8 @@ export default function Index() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
-<<<<<<< HEAD
         <Route path="/gemini" element={<Gemini />} />
-=======
-        <Route path="quiz" element={<Quiz />} />
->>>>>>> a06c207 (quiz.js ready for backend implementation)
+        <Route path="/quiz" element={<Quiz />} />
       </Routes>
     </BrowserRouter>
   );
