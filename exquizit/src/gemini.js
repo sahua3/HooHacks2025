@@ -57,7 +57,7 @@ function App() {
 
 
   return (
-    <div className="App">
+    <div className="Gemini">
       <div className="chat-box">
         {chatHistory.map((chat, index) => (
           <div key={index} className={chat.sender === 'user' ? 'user-message' : 'gemini-message'}>
