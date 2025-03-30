@@ -160,11 +160,11 @@
         width: 50%;
         background-color: #fff;
         border-radius: 12px;
-        gap: 3rem;
+        gap: 0.5rem;
 }
 
 .feedback-message {
-  font-size: 1rem;
+  font-size: 1.5rem;
 }
 
 .feedback-box button {
@@ -194,3 +194,32 @@
   background-color: var(--primary-dark);
 }
 
+.res-box {
+        width: 50%;            /* Match one column of choices */
+        margin-left: 0.8rem;   /* Match .choices-grid padding */
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        text-align: left;
+        gap: 1rem;
+        padding: 1rem;
+        margin-top: -2rem;
+}
+      
+
+.score {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+}
+
+.reset-btn {
+        padding: 2rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+}
+      

@@ -146,7 +146,7 @@ const Quiz = ({ topic, setTopic }) => {
   
 
   return (
-    <div>
+    <div class="quiz-content">
       {/* Logo */}
       <div className="logo-container">
         <img src={logo} alt="logo" />
@@ -232,8 +232,6 @@ const Quiz = ({ topic, setTopic }) => {
                 </div>
               )}
 
-              
-
               {/* Feedback after user submits current question */}
               {showFeedback && (
                 <div className="feedback-box">
@@ -260,14 +258,14 @@ const Quiz = ({ topic, setTopic }) => {
           )}
         </AnimatePresence>
       </div>
-
       {/* Results after final submission */}
       {results && (
-        <div style={{ marginTop: "1rem" }}>
-          <pre>
+        <div className="res-box">
+          <pre className="score">
             Score: {results.filter((r) => r.correct).length}/{results.length}
           </pre>
           <button
+            className="reset-btn"
             onClick={() => {
               setResults(null);
               setAnswers({});
