@@ -28,7 +28,7 @@ function Quiz() {
 
     try {
         // Send the message to the backend
-        const response = await axios.post('http://localhost:5000/chat', {
+        const response = await axios.post('http://localhost:3002/chat', {
             message: userMessage
         });
 

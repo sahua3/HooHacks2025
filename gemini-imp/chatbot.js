@@ -7,7 +7,7 @@ require('dotenv').config();
 const cors = require('cors');  // Add cors to allow cross-origin requests
 
 const app = express();
-const port = process.env.PORT || 5000; //Hardcoded so that connection to front end works
+const port = process.env.PORT || 3002; //Hardcoded so that connection to front end works
 
 app.use(express.json()); // Use express forehead
 app.use(cors());  // Enable CORS for all requests
