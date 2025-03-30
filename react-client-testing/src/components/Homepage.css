@@ -1,47 +1,64 @@
-.App {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .App-logo {
-    height: 40vmin;
-    pointer-events: none;
-  }
-  
-  .App-header {
-    background-color: #FFFFFF;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:top center;
-    padding-top: 40px;
-    color: black;
-  }
-  
-  .body{
-    align-items: bottom center;
-    display: flex;
-    flex-direction: column;
-    height: 100px;
-    width: 400px;
-    background-color: #FFFFFF;
-    padding: 40px;
-    margin: 40px;
-    justify-content: center;
-  }
-  
-  .Button{
-    background-color: #FFFFFF;
-    border: none;
-    color: black;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-  }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Layout container */
+.HomePage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f4f8;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header styling */
+.App-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 60px 80px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Bunny image */
+.App-header img {
+  margin-bottom: 40px;
+}
+
+/* Button container */
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Button style (custom component uses className) */
+Button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+Button:hover {
+  background-color: #357ABD;
+}
+
+/* Footer styling */
+.footer {
+  font-size: 0.9rem;
+  color: #777;
+}
