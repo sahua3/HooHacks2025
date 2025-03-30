@@ -15,7 +15,6 @@ function HomePage() {
         
         <div className="body">
           <Button className="btn" btnTxt={'PLAY'} route="/start"/>
-          <Button className="btn" btnTxt={'HOW TO PLAY'}/>
             <div className="footer">
                 <p>Made with ❤️ by the ExQuizit Team</p>
                 <p>Version 1.0.0</p>

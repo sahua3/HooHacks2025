@@ -4,6 +4,7 @@ import "./Quiz.css";
 import logo from "../assets/exQuizit_logo.png";
 import ChatBot from "./chat"; 
 import GenerateButton from "./GenerateButton"; // AI question generator
+import axios from "axios";
 
 const Quiz = ({ topic, setTopic }) => {
   const [questions, setQuestions] = useState([]);
@@ -12,7 +13,8 @@ const Quiz = ({ topic, setTopic }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [showFeedback, setShowFeedback] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
-  const [aiExplanation, setAiExplanation] = useState("");
+  const [chatPrompt, setChatPrompt] = useState(""); // to trigger chatbot externally
+
 
   // Whenever `topic` changes, reload the questions
   useEffect(() => {
@@ -37,7 +39,6 @@ const Quiz = ({ topic, setTopic }) => {
       setCurrentQuestionIndex(0);
       setShowFeedback(false);
       setCurrentResult(null);
-      setAiExplanation("");
     } catch (err) {
       console.error("Error loading questions:", err);
       alert("Failed to load questions. Is the backend running?");
@@ -107,7 +108,6 @@ const Quiz = ({ topic, setTopic }) => {
   // Move to next question, or finish if on the last question
   const handleNextQuestion = () => {
     setShowFeedback(false);
-    setAiExplanation("");
     setCurrentResult(null);
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((i) => i + 1);
@@ -118,6 +118,33 @@ const Quiz = ({ topic, setTopic }) => {
 
   const currentQuestion = questions[currentQuestionIndex];
 
+  const hintWithAI = () => {
+    console.log("Hint button clicked!"); // Check if it's firin
+    const questionText = questions[currentQuestionIndex].questionText;
+    const choices = questions[currentQuestionIndex].choices.join(", ");
+    // const correctAnswer = currentResult?.correctAnswer || null;
+    const prompt = `Given the question: "${questionText}" with choices: ${choices}. Can you provide a small hint without revealing the answer?`;
+  
+    setChatPrompt(prompt); // This will send it to the chatbot and open the window
+  };
+
+  const explainWithAI = () => {
+    if (!currentResult?.correctAnswer) {
+      console.warn("No answer to explain yet.");
+      return;
+    }
+  
+    const questionText = questions[currentQuestionIndex].questionText;
+    const choices = questions[currentQuestionIndex].choices.join(", ");
+    const correctAnswer = currentResult.correctAnswer;
+  
+    const prompt = `Given the question: "${questionText}" with choices: ${choices}. Why is the answer, "${correctAnswer}", correct?`;
+  
+    console.log("Sending to Gemini:", prompt);
+    setChatPrompt(prompt);
+  };
+  
+
   return (
     <div>
       {/* Logo */}
@@ -127,7 +154,7 @@ const Quiz = ({ topic, setTopic }) => {
 
       {/* Chatbot pinned in bottom-right */}
       <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
-        <ChatBot />
+        <ChatBot externalPrompt={chatPrompt} openOnPrompt={true} />
       </div>
 
       {/* Quiz content */}
@@ -187,20 +214,29 @@ const Quiz = ({ topic, setTopic }) => {
 
               {/* Show Submit button if no feedback or final results */}
               {!showFeedback && !results && (
-                <button
-                  className="submit-btn"
-                  onClick={handleAnswerSubmit}
-                  disabled={!answers[currentQuestion._id]}
-                >
-                  Submit Answer
-                </button>
+                <div className="submit-hit-box">
+                  <button
+                    className="submit-btn"
+                    onClick={handleAnswerSubmit}
+                    disabled={!answers[currentQuestion._id]}
+                  >
+                    Submit Answer
+                  </button>
+
+                  <button
+                    className="hint-btn"
+                    onClick={hintWithAI}
+                  >
+                    Get Hint from AI
+                  </button>
+                </div>
               )}
+
+              
 
               {/* Feedback after user submits current question */}
               {showFeedback && (
                 <div className="feedback-box">
-                  <button onClick={handleNextQuestion}>Next Question</button>
-
                   {currentResult?.correct ? (
                     <p className="correct-text">✅ Correct!</p>
                   ) : (
@@ -209,6 +245,15 @@ const Quiz = ({ topic, setTopic }) => {
                       {currentResult?.correctAnswer}
                     </p>
                   )}
+                  <div className="feedback-btn-box">
+                    <button onClick={handleNextQuestion}>Next Question</button>
+                    <button
+                      className="explain-btn"
+                      onClick={explainWithAI}
+                    >
+                      Why?
+                    </button>
+                  </div>
                 </div>
               )}
             </motion.div>
@@ -229,7 +274,6 @@ const Quiz = ({ topic, setTopic }) => {
               setCurrentQuestionIndex(0);
               setShowFeedback(false);
               setCurrentResult(null);
-              setAiExplanation("");
             }}
           >
             Try Again
