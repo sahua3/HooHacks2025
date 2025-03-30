@@ -11,11 +11,11 @@
 }
 
 .logo-container img {
-  width: 100px;
+  width: 120px;
   height: auto;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 20px;
+  left: 20px;
   margin: 0;
 }
 
@@ -30,64 +30,70 @@
 .topic-buttons {
   flex-grow: 1;
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  max-width: 1200px; /* Add max-width for better large screen appearance */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, auto);
+  gap: 6px 8px; /* Reduced vertical gap (6px) while keeping horizontal gap (8px) */
   justify-content: center;
   align-items: center;
-  gap: 20px;
+  place-items: center; /* Center items within grid cells */
+  margin: 0 auto; /* Center the entire grid container */
 }
 
 /* Individual topic button */
 button.topic-btn {
-  width: 80%;
-  max-width: 400px;
-  padding: 2rem 1.5rem;
-  font-size: 2rem;
-  background-color: #007bff;       /* Default blue */
+  width: 90%; /* Increased width */
+  max-width: 370px; /* Increased max width */
+  padding: 2rem 1.3rem; /* Slightly larger padding */
+  font-size: 1.8rem;
+  background-color: #dda0dd; /* Plum */
   color: white;
   border: 2px solid transparent;
-  border-radius: 12px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.25s ease;
 }
 
 /* Hover effect - brighter + slight shadow */
 button.topic-btn:hover {
-  background-color: #339eff;       /* Brighter blue */
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 123, 255, 0.25);
+  background-color: #e6b3e6; /* Brighter plum */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(221, 160, 221, 0.2);
 }
 
-/* Selected/Active state - darker and outlined */
+/* Selected/Active state - slightly darker and outlined */
 button.topic-btn.active {
-  background-color: #0056b3;
-  border: 2px solid #00408d;
-  box-shadow: 0 0 0 4px #cce5ff;
-  transform: scale(1.02);
+  background-color: #ce8ece; /* Less dark plum */
+  border: 2px solid #c170c1; /* Border similar to background */
+  box-shadow: 0 0 0 3px #f3e5f5;
+  transform: scale(1.01);
 }
-
 
 /* Start Quiz button section */
 .start-button-container {
-  width: 100%;
+  width: 80%;
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .start-quiz-btn {
   padding: 1rem 2rem;
-  font-size: 1.3rem;
-  background-color: #28a745;
+  font-size: 1.5rem;
+  background-color: #8a2be2; /* More purple to contrast with topic buttons */
   color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
+  width: auto; /* Prevents spanning the full width */
+  max-width: 250px; /* Limits the maximum width */
+  margin: 0 auto; /* Centers the button */
 }
 
 .start-quiz-btn:hover {
-  background-color: #218838;
+  background-color: #6a1b9a; /* Darker purple on hover */
 }
 
 .start-quiz-btn:disabled {

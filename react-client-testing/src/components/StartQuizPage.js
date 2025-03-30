@@ -25,20 +25,20 @@ const StartQuizPage = ({ setTopic }) => {
       </div> 
       <h1 className="start-title">Select a Topic</h1>
 
-      {/* Topic Selection Buttons */}
-      <div className="topic-buttons">
-        {["Math", "Science", "History"].map((topic) => (
-          <button
-            key={topic}
-            className={`topic-btn ${selectedTopic === topic ? "active" : ""}`}
-            onClick={() => handleTopicSelect(topic)}
-          >
-            {topic}
-          </button>
-        ))}
-      </div>
+        {/* Topic Selection Buttons */}
+        <div className="topic-buttons">
+          {["Math", "Science", "History", "Geography", "Literature", "Art", "Technology", "Sports", "Music"].map((topic) => (
+            <button
+          key={topic}
+          className={`topic-btn ${selectedTopic === topic ? "active" : ""}`}
+          onClick={() => handleTopicSelect(topic)}
+            >
+          {topic}
+            </button>
+          ))}
+        </div>
 
-      {/* Start Quiz Button */}
+        {/* Start Quiz Button */}
       <div className="start-button-container">
         <button
           className="start-quiz-btn"

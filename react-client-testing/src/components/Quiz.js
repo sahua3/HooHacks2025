@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Quiz.css";
+import logo from '../assets/exQuizit_logo.png';
 import ChatBot from "./chat"; // Import the ChatBot component
 
 const Quiz = ({ topic }) => {
@@ -107,37 +108,18 @@ const Quiz = ({ topic }) => {
     }
   };
 
-  // explain the answer using AI
-  // this function sends the question text, correct answer, and user answer to the AI API
-  const explainWithAI = async () => {
-    const questionText = questions[currentQuestionIndex].questionText;
-    const correctAnswer = currentResult?.correctAnswer;
-    const userAnswer = currentResult?.userAnswer;
-
-    try {
-      const res = await fetch("/api/ai/explain", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questionText, correctAnswer, userAnswer })
-      });
-
-      const data = await res.json();
-      setAiExplanation(data.explanation);
-    } catch (err) {
-      setAiExplanation("Sorry, AI couldn't generate an explanation.");
-    }
-  };
-
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <div>
-      <h2>exQuizit: Take a Quiz</h2>
+      <div className="logo-container">
+          <img src={logo} alt="logo"/>
+      </div> 
       {/*display the topic and question number*/}
       <div id="quiz-container">
-      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
-            <ChatBot />
-          </div>
+        <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
+          <ChatBot />
+        </div>
         <AnimatePresence mode="wait">
           {questions.length > 0 && currentQuestion && (
             <motion.div
@@ -172,7 +154,7 @@ const Quiz = ({ topic }) => {
 
                   // if the user has selected an answer, disable the click event
                   // otherwise, allow the user to select an answer
-                  return (
+                    return (
                     <div
                       key={choice}
                       className={boxClass}
@@ -180,51 +162,41 @@ const Quiz = ({ topic }) => {
                     >
                       {choice}
                     </div>
-                  );
-                })}
+                    );
+                  })}
+                  </div>
+
+                  {/* submit button */}
+                  {!showFeedback && !results && (
+                  <button
+                    className="submit-btn" 
+                    onClick={handleAnswerSubmit}
+                    disabled={!answers[currentQuestion._id]}
+                  >
+                    Submit Answer
+                  </button>
+                  )}
+
+                  {/* feedback after submitting the answer */}
+                  {showFeedback && (
+                  <div className="feedback-box">
+                    <button onClick={handleNextQuestion}>Next Question</button>
+                    
+                    {currentResult?.correct ? (
+                    <p className="correct-text">✅ Correct!</p>
+                    ) : (
+                    <p className="incorrect-text">❌ Incorrect. The correct answer was: {currentResult?.correctAnswer}</p>
+                    )}
+
+                    
+                  </div>
+                  )}
+                </motion.div>
+                )}
+              </AnimatePresence>
               </div>
 
-              {/* submit button */}
-              {!showFeedback && !results && (
-                <button
-                  onClick={handleAnswerSubmit}
-                  disabled={!answers[currentQuestion._id]}
-                >
-                  Submit Answer
-                </button>
-              )}
-
-              {/* feedback after submitting the answer */}
-              {showFeedback && (
-                <div className="feedback-box">
-                  {currentResult?.correct ? (
-                    <p className="correct-text">✅ Correct!</p>
-                  ) : (
-                    <p className="incorrect-text">❌ Incorrect. The correct answer was: {currentResult?.correctAnswer}</p>
-                  )}
-
-                  <button onClick={handleNextQuestion}>Next Question</button>
-
-                  {/* Why? button */}
-                  {!currentResult?.correct && (
-                    <button onClick={explainWithAI}>Why?</button>
-                  )}
-
-                  {/* AI explanation */}
-                  {aiExplanation && (
-                    <div className="ai-explanation">
-                      <p><strong>AI says:</strong> {aiExplanation}</p>
-                    </div>
-                  )}
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* display the score after submitting the quiz */}}
-      {results && (
+              {/* display the score after submitting the quiz */}      {results && (
         <div style={{ marginTop: "1rem" }}>
           <pre>
             Score: {results.filter(r => r.correct).length}/{results.length}
