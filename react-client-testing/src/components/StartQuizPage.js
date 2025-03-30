@@ -10,7 +10,6 @@ const StartQuizPage = ({ setTopic }) => {
     setSelectedTopic(topic);
   };
 
-// Function to handle the start quiz button click
   const handleStartQuiz = () => {
     if (selectedTopic) {
       setTopic(selectedTopic);
@@ -20,9 +19,9 @@ const StartQuizPage = ({ setTopic }) => {
 
   return (
     <div className="start-container">
-      <h1>Select a Topic</h1>
+      <h1 className="start-title">Select a Topic</h1>
 
-      {/* Topic selection buttons */}
+      {/* Topic Selection Buttons */}
       <div className="topic-buttons">
         {["Math", "Science", "History"].map((topic) => (
           <button
@@ -35,6 +34,7 @@ const StartQuizPage = ({ setTopic }) => {
         ))}
       </div>
 
+      {/* Start Quiz Button */}
       <div className="start-button-container">
         <button
           className="start-quiz-btn"
