@@ -37,6 +37,7 @@ const Quiz = ({ topic }) => {
     setAnswers(prev => ({ ...prev, [questionId]: value }));
   };
 
+    // submit the entire quiz answers for grading
   const handleSubmit = async () => {
     try {
       const payload = {
@@ -64,6 +65,7 @@ const Quiz = ({ topic }) => {
     }
   };
 
+  // submit the answer for the current question for grading
   const handleAnswerSubmit = async () => {
     const question = questions[currentQuestionIndex];
     const userAnswer = answers[question._id];
@@ -91,6 +93,8 @@ const Quiz = ({ topic }) => {
     }
   };
 
+  // handle the next question button click
+  // if the current question is the last one, submit the quiz
   const handleNextQuestion = () => {
     setShowFeedback(false);
     setAiExplanation("");
@@ -102,6 +106,8 @@ const Quiz = ({ topic }) => {
     }
   };
 
+  // explain the answer using AI
+  // this function sends the question text, correct answer, and user answer to the AI API
   const explainWithAI = async () => {
     const questionText = questions[currentQuestionIndex].questionText;
     const correctAnswer = currentResult?.correctAnswer;
@@ -127,6 +133,7 @@ const Quiz = ({ topic }) => {
     <div>
       <h2>exQuizit: Take a Quiz</h2>
 
+      // display the topic and question number
       <div id="quiz-container">
         <AnimatePresence mode="wait">
           {questions.length > 0 && currentQuestion && (
@@ -138,16 +145,22 @@ const Quiz = ({ topic }) => {
               transition={{ duration: 0.3 }}
               className="quiz-container"
             >
+              // display the question number and text
               <div className="question-box">
                 <p><strong>{currentQuestionIndex + 1}.</strong> {currentQuestion.questionText}</p>
               </div>
 
+              // display the choices in a grid layout
+              // if the user has already selected an answer, highlight it
               <div className="choices-grid">
                 {currentQuestion.choices.map(choice => {
                   const isSelected = answers[currentQuestion._id] === choice;
                   const isCorrect = currentResult?.correctAnswer === choice;
 
                   let boxClass = "choice-box";
+
+                  // if the user has selected an answer, 
+                  // highlight it and show feedback
                   if (showFeedback) {
                     if (currentResult?.correctAnswer === choice) boxClass += " correct";
                     if (currentResult?.userAnswer === choice && !currentResult.correct) boxClass += " incorrect";
@@ -155,6 +168,8 @@ const Quiz = ({ topic }) => {
                     boxClass += " selected";
                   }
 
+                  // if the user has selected an answer, disable the click event
+                  // otherwise, allow the user to select an answer
                   return (
                     <div
                       key={choice}
@@ -167,6 +182,7 @@ const Quiz = ({ topic }) => {
                 })}
               </div>
 
+              // display the submit button if the user has selected an answer
               {!showFeedback && !results && (
                 <button
                   onClick={handleAnswerSubmit}
@@ -176,6 +192,7 @@ const Quiz = ({ topic }) => {
                 </button>
               )}
 
+              // display the feedback box if the user has submitted an answer
               {showFeedback && (
                 <div className="feedback-box">
                   {currentResult?.correct ? (
@@ -186,10 +203,13 @@ const Quiz = ({ topic }) => {
 
                   <button onClick={handleNextQuestion}>Next Question</button>
 
+                  // display the "Why?" button if the answer is incorrect
+                  // (implement user prompt to explain the answer later on)
                   {!currentResult?.correct && (
                     <button onClick={explainWithAI}>Why?</button>
                   )}
 
+                  // display the AI explanation if available
                   {aiExplanation && (
                     <div className="ai-explanation">
                       <p><strong>AI says:</strong> {aiExplanation}</p>
@@ -202,6 +222,7 @@ const Quiz = ({ topic }) => {
         </AnimatePresence>
       </div>
 
+      // display the results if the quiz is finished
       {results && (
         <div style={{ marginTop: "1rem" }}>
           <pre>
