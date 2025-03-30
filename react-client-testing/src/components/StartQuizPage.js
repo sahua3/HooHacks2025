@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./StartQuizPage.css";
+import logo from '../assets/exQuizit_logo.png';
 
 const StartQuizPage = ({ setTopic }) => {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ const StartQuizPage = ({ setTopic }) => {
 
   return (
     <div className="start-container">
+      <div className="logo-container">
+        <img src={logo} alt="logo"/>
+      </div> 
       <h1 className="start-title">Select a Topic</h1>
 
       {/* Topic Selection Buttons */}

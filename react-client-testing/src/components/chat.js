@@ -7,8 +7,8 @@ const ChatBot = () => {
   const [userMessage, setUserMessage] = useState('');
   const [chatHistory, setChatHistory] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(true); // 👈 minimize state
-  
+  const [isOpen, setIsOpen] = useState(false); // 👈 Set to false initially
+
   useEffect(() => {
     // Add a welcome message from Gemini on first load
     setChatHistory([

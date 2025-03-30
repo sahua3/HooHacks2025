@@ -5,9 +5,18 @@
   height: 100vh;
   justify-content: space-between;
   align-items: center;
-  background-color: #f0f4f8;
+  background-color: #fff;
   padding: 2rem;
   text-align: center;
+}
+
+.logo-container img {
+  width: 100px;
+  height: auto;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  margin: 0;
 }
 
 /* Header text */

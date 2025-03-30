@@ -1,14 +1,17 @@
-import bunny from '../assets/bunny.png';
+import logo from '../assets/exQuizit_logo.png';
+import bg from '../assets/exQuizit_bg.png';
 import React from 'react';
 import './Homepage.css';
 import Button from './Button';
 
 function HomePage() {
   return (
-    <div className="HomePage">
+    <div 
+      className="HomePage" 
+      style={{ backgroundImage: `url(${bg})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}
+    >
       <div className="App-header">
-        <h1>exQuizit</h1>
-        <img src={bunny} width="400" height="200" alt="bunny"/> 
+        <img src={logo} width="400" height="200" alt="bunny"/> 
         
         <div className="body">
           <Button className="btn" btnTxt={'PLAY'} route="/start"/>
