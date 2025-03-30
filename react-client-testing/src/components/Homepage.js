@@ -1,4 +1,3 @@
-import logoTemp from '../assets/templogo.jpeg'
 import bunny from '../assets/bunny.png';
 import React from 'react';
 import './Homepage.css';

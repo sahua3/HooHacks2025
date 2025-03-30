@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Quiz.css";
+import ChatBot from "../chat"; // Import the ChatBot component
 
 const Quiz = ({ topic }) => {
   const [questions, setQuestions] = useState([]);
@@ -132,9 +133,11 @@ const Quiz = ({ topic }) => {
   return (
     <div>
       <h2>exQuizit: Take a Quiz</h2>
-
-      // display the topic and question number
+      {/*display the topic and question number*/}
       <div id="quiz-container">
+      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
+            <ChatBot />
+          </div>
         <AnimatePresence mode="wait">
           {questions.length > 0 && currentQuestion && (
             <motion.div
