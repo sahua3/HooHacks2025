@@ -66,6 +66,7 @@ function Quiz() {
                 <QButton btnTxt={'woof'}/>
                 <QButton btnTxt={'squeak'}/>
             </div>
+            //chatbot
             <div className="chatBot">
             {chatHistory.map((chat, index) => (
           <div key={index} className={chat.sender === 'user' ? 'user-message' : 'gemini-message'}>
@@ -74,6 +75,7 @@ function Quiz() {
           </div>
           ))}
           {loading && <div>Gemini is typing...</div>}
+          //separate text input
           </div>
             <div className="input-container">
           < input
