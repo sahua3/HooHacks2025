@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Quiz.css";
-import logo from '../assets/exQuizit_logo.png';
-import ChatBot from "./chat"; // Import the ChatBot component
+import logo from "../assets/exQuizit_logo.png";
+import ChatBot from "./chat"; 
+import GenerateButton from "./GenerateButton"; // AI question generator
 
-const Quiz = ({ topic }) => {
+const Quiz = ({ topic, setTopic }) => {
   const [questions, setQuestions] = useState([]);
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState(null);
@@ -13,15 +14,23 @@ const Quiz = ({ topic }) => {
   const [currentResult, setCurrentResult] = useState(null);
   const [aiExplanation, setAiExplanation] = useState("");
 
+  // Whenever `topic` changes, reload the questions
   useEffect(() => {
-    loadQuestions();
+    const timeout = setTimeout(() => {
+      loadQuestions();
+    }, 200); // adjust timing to match animation (e.g. 200ms)
+  
+    return () => clearTimeout(timeout);
   }, [topic]);
+  
 
+  // Fetch questions from your backend
   const loadQuestions = async () => {
     try {
       const res = await fetch(`/api/questions?topic=${topic}&limit=5`);
       if (!res.ok) throw new Error("Failed to fetch questions");
       const data = await res.json();
+
       setQuestions(data);
       setAnswers({});
       setResults(null);
@@ -36,25 +45,25 @@ const Quiz = ({ topic }) => {
   };
 
   const handleSelect = (questionId, value) => {
-    setAnswers(prev => ({ ...prev, [questionId]: value }));
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
-    // submit the entire quiz answers for grading
+  // Submit entire quiz for final grading
   const handleSubmit = async () => {
     try {
       const payload = {
         userId: "test-user",
         topic,
-        answers: questions.map(q => ({
+        answers: questions.map((q) => ({
           questionId: q._id,
-          userAnswer: answers[q._id] || null
-        }))
+          userAnswer: answers[q._id] || null,
+        })),
       };
 
       const res = await fetch("/api/quiz/grade", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const result = await res.json();
@@ -67,7 +76,7 @@ const Quiz = ({ topic }) => {
     }
   };
 
-  // submit the answer for the current question for grading
+  // Submit single question's answer
   const handleAnswerSubmit = async () => {
     const question = questions[currentQuestionIndex];
     const userAnswer = answers[question._id];
@@ -76,7 +85,7 @@ const Quiz = ({ topic }) => {
       const res = await fetch("/api/questions/check", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questionId: question._id, userAnswer })
+        body: JSON.stringify({ questionId: question._id, userAnswer }),
       });
 
       const data = await res.json();
@@ -85,7 +94,7 @@ const Quiz = ({ topic }) => {
         questionId: question._id,
         userAnswer,
         correctAnswer: data.correctAnswer,
-        correct: data.correct
+        correct: data.correct,
       });
 
       setShowFeedback(true);
@@ -95,14 +104,13 @@ const Quiz = ({ topic }) => {
     }
   };
 
-  // handle the next question button click
-  // if the current question is the last one, submit the quiz
+  // Move to next question, or finish if on the last question
   const handleNextQuestion = () => {
     setShowFeedback(false);
     setAiExplanation("");
     setCurrentResult(null);
     if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(i => i + 1);
+      setCurrentQuestionIndex((i) => i + 1);
     } else {
       handleSubmit();
     }
@@ -112,14 +120,18 @@ const Quiz = ({ topic }) => {
 
   return (
     <div>
+      {/* Logo */}
       <div className="logo-container">
-          <img src={logo} alt="logo"/>
-      </div> 
-      {/*display the topic and question number*/}
+        <img src={logo} alt="logo" />
+      </div>
+
+      {/* Chatbot pinned in bottom-right */}
+      <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
+        <ChatBot />
+      </div>
+
+      {/* Quiz content */}
       <div id="quiz-container">
-        <div style={{ position: "fixed", bottom: 20, right: 20, zIndex: 1000 }}>
-          <ChatBot />
-        </div>
         <AnimatePresence mode="wait">
           {questions.length > 0 && currentQuestion && (
             <motion.div
@@ -130,85 +142,96 @@ const Quiz = ({ topic }) => {
               transition={{ duration: 0.3 }}
               className="quiz-container"
             >
-              {/* display the question number and text */}
               <div className="question-box">
-                <p><strong>{currentQuestionIndex + 1}.</strong> {currentQuestion.questionText}</p>
+                <p>
+                  <strong>{currentQuestionIndex + 1}.</strong>{" "}
+                  {currentQuestion.questionText}
+                </p>
               </div>
 
-              {/* display the choices for the current question */}
               <div className="choices-grid">
-                {currentQuestion.choices.map(choice => {
+                {currentQuestion.choices.map((choice) => {
                   const isSelected = answers[currentQuestion._id] === choice;
                   const isCorrect = currentResult?.correctAnswer === choice;
 
                   let boxClass = "choice-box";
 
-                  // if the user has selected an answer, 
-                  // highlight it and show feedback
                   if (showFeedback) {
-                    if (currentResult?.correctAnswer === choice) boxClass += " correct";
-                    if (currentResult?.userAnswer === choice && !currentResult.correct) boxClass += " incorrect";
+                    if (currentResult?.correctAnswer === choice) {
+                      boxClass += " correct";
+                    }
+                    if (
+                      currentResult?.userAnswer === choice &&
+                      !currentResult.correct
+                    ) {
+                      boxClass += " incorrect";
+                    }
                   } else if (isSelected) {
                     boxClass += " selected";
                   }
 
-                  // if the user has selected an answer, disable the click event
-                  // otherwise, allow the user to select an answer
-                    return (
+                  return (
                     <div
                       key={choice}
                       className={boxClass}
-                      onClick={() => !showFeedback && handleSelect(currentQuestion._id, choice)}
+                      onClick={() =>
+                        !showFeedback &&
+                        handleSelect(currentQuestion._id, choice)
+                      }
                     >
                       {choice}
                     </div>
-                    );
-                  })}
-                  </div>
-
-                  {/* submit button */}
-                  {!showFeedback && !results && (
-                  <button
-                    className="submit-btn" 
-                    onClick={handleAnswerSubmit}
-                    disabled={!answers[currentQuestion._id]}
-                  >
-                    Submit Answer
-                  </button>
-                  )}
-
-                  {/* feedback after submitting the answer */}
-                  {showFeedback && (
-                  <div className="feedback-box">
-                    <button onClick={handleNextQuestion}>Next Question</button>
-                    
-                    {currentResult?.correct ? (
-                    <p className="correct-text">✅ Correct!</p>
-                    ) : (
-                    <p className="incorrect-text">❌ Incorrect. The correct answer was: {currentResult?.correctAnswer}</p>
-                    )}
-
-                    
-                  </div>
-                  )}
-                </motion.div>
-                )}
-              </AnimatePresence>
+                  );
+                })}
               </div>
 
-              {/* display the score after submitting the quiz */}      {results && (
+              {/* Show Submit button if no feedback or final results */}
+              {!showFeedback && !results && (
+                <button
+                  className="submit-btn"
+                  onClick={handleAnswerSubmit}
+                  disabled={!answers[currentQuestion._id]}
+                >
+                  Submit Answer
+                </button>
+              )}
+
+              {/* Feedback after user submits current question */}
+              {showFeedback && (
+                <div className="feedback-box">
+                  <button onClick={handleNextQuestion}>Next Question</button>
+
+                  {currentResult?.correct ? (
+                    <p className="correct-text">✅ Correct!</p>
+                  ) : (
+                    <p className="incorrect-text">
+                      ❌ Incorrect. The correct answer was:{" "}
+                      {currentResult?.correctAnswer}
+                    </p>
+                  )}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Results after final submission */}
+      {results && (
         <div style={{ marginTop: "1rem" }}>
           <pre>
-            Score: {results.filter(r => r.correct).length}/{results.length}
+            Score: {results.filter((r) => r.correct).length}/{results.length}
           </pre>
-          <button onClick={() => {
-            setResults(null);
-            setAnswers({});
-            setCurrentQuestionIndex(0);
-            setShowFeedback(false);
-            setCurrentResult(null);
-            setAiExplanation("");
-          }}>
+          <button
+            onClick={() => {
+              setResults(null);
+              setAnswers({});
+              setCurrentQuestionIndex(0);
+              setShowFeedback(false);
+              setCurrentResult(null);
+              setAiExplanation("");
+            }}
+          >
             Try Again
           </button>
         </div>

@@ -1,5 +1,6 @@
 import express from "express";
 import Question from "../models/Question.js";
+import { generateQuestionsFromAI } from "../utils/aiGemini.js";
 
 const router = express.Router();
 
@@ -50,5 +51,14 @@ router.post("/check", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.post("/generate", async (req, res) => {
+  const { topic } = req.body;
+  const questions = await generateQuestionsFromAI(topic); // from aiGemini.js
+  const inserted = await Question.insertMany(questions);
+  res.json({ inserted });
+});
+
+
 
 export default router;
