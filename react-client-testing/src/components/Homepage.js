@@ -9,7 +9,7 @@ function HomePage() {
     <div className="HomePage">
       <div className="App-header">
         <img src={bunny} width="400" height="200" alt="bunny"/> 
-
+        
         <div className="body">
           <Button btnTxt={'PLAY'} route="/start"/>
           <Button btnTxt={'HOW TO PLAY'}/>
