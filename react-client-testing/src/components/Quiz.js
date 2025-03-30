@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Quiz.css";
-import ChatBot from "../chat"; // Import the ChatBot component
+import ChatBot from "./chat"; // Import the ChatBot component
 
 const Quiz = ({ topic }) => {
   const [questions, setQuestions] = useState([]);

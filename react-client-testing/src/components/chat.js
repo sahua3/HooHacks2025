@@ -1,5 +1,4 @@
-// src/ChatBot.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import './chat.css';
 import axios from 'axios';
@@ -9,7 +8,17 @@ const ChatBot = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(true); // 👈 minimize state
-
+  
+  useEffect(() => {
+    // Add a welcome message from Gemini on first load
+    setChatHistory([
+      {
+        sender: 'gemini',
+        message: "Hi there! I'm your quiz assistant. Ask me anything about the current question or topic!"
+      }
+    ]);
+  }, []);
+  
   const handleInputChange = (event) => {
     setUserMessage(event.target.value);
   };
