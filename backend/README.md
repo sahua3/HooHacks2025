@@ -26,14 +26,14 @@ cd exquizit/backend
 ### 2. Install dependencies
 
 ```bash
-npm install
+npm install mongoose express cors dotenv
 ```
 
 ### 3. Add your `.env` file
 
 Create a `.env` file in the `backend/` folder:
 
-```env
+```env  
 MONGO_URI=your_mongodb_connection_string
 PORT=3000
 ```

@@ -12,7 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/start" element={<StartQuizPage setTopic={setTopic} />} />
-        <Route path="/quiz" element={<Quiz topic={topic} />} />
+        <Route path="/quiz" element={<Quiz topic={topic} setTopic={setTopic} />} />
+
       </Routes>
     </Router>
   );
