@@ -22,7 +22,7 @@ const StartQuizPage = ({ setTopic }) => {
     <div className="start-container">
       <h1>Select a Topic</h1>
 
-        // display the topic buttons
+      {/* Topic selection buttons */}
       <div className="topic-buttons">
         {["Math", "Science", "History"].map((topic) => (
           <button
@@ -35,7 +35,6 @@ const StartQuizPage = ({ setTopic }) => {
         ))}
       </div>
 
-      // start quiz
       <div className="start-button-container">
         <button
           className="start-quiz-btn"

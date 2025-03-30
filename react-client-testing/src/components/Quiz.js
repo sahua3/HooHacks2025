@@ -148,13 +148,12 @@ const Quiz = ({ topic }) => {
               transition={{ duration: 0.3 }}
               className="quiz-container"
             >
-              // display the question number and text
+              {/* display the question number and text */}
               <div className="question-box">
                 <p><strong>{currentQuestionIndex + 1}.</strong> {currentQuestion.questionText}</p>
               </div>
 
-              // display the choices in a grid layout
-              // if the user has already selected an answer, highlight it
+              {/* display the choices for the current question */}
               <div className="choices-grid">
                 {currentQuestion.choices.map(choice => {
                   const isSelected = answers[currentQuestion._id] === choice;
@@ -185,7 +184,7 @@ const Quiz = ({ topic }) => {
                 })}
               </div>
 
-              // display the submit button if the user has selected an answer
+              {/* submit button */}
               {!showFeedback && !results && (
                 <button
                   onClick={handleAnswerSubmit}
@@ -195,7 +194,7 @@ const Quiz = ({ topic }) => {
                 </button>
               )}
 
-              // display the feedback box if the user has submitted an answer
+              {/* feedback after submitting the answer */}
               {showFeedback && (
                 <div className="feedback-box">
                   {currentResult?.correct ? (
@@ -206,13 +205,12 @@ const Quiz = ({ topic }) => {
 
                   <button onClick={handleNextQuestion}>Next Question</button>
 
-                  // display the "Why?" button if the answer is incorrect
-                  // (implement user prompt to explain the answer later on)
+                  {/* Why? button */}
                   {!currentResult?.correct && (
                     <button onClick={explainWithAI}>Why?</button>
                   )}
 
-                  // display the AI explanation if available
+                  {/* AI explanation */}
                   {aiExplanation && (
                     <div className="ai-explanation">
                       <p><strong>AI says:</strong> {aiExplanation}</p>
@@ -225,7 +223,7 @@ const Quiz = ({ topic }) => {
         </AnimatePresence>
       </div>
 
-      // display the results if the quiz is finished
+      {/* display the score after submitting the quiz */}}
       {results && (
         <div style={{ marginTop: "1rem" }}>
           <pre>
