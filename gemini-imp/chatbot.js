@@ -18,10 +18,13 @@ const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/
 // Function to call the Gemini API
 async function getGeminiResponse(prompt) {
     try {
+        
+        prefix = "Respond to this with a max of 150 words:";
+        
         const response = await axios.post(
             `${GEMINI_API_URL}?key=${API_KEY}`, // Sets up API 
             {
-                contents: [{ parts: [{ text: "Respond to this with a max of 150 words:" + prompt }] }] // Prompt engineer so that prompts are brief
+                contents: [{ parts: [{ text: prefix + prompt}] }] // Prompt engineer so that prompts are brief
             },
             { headers: { "Content-Type": "application/json" } } // Sets API to work with JSON code
         );
@@ -41,8 +44,8 @@ async function getGeminiResponse(prompt) {
 
 // Chat route to handle user messages
 app.post('/chat', async (req, res) => {
-    const userMessage = req.body.message; // Store user message
-
+    const userMessage = req.body.message
+   
     // If a user sends a message, begin the whole shabang
     if (userMessage) {
         const geminiResponse = await getGeminiResponse(userMessage); // Wait for call to the API to return 

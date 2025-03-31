@@ -8,13 +8,12 @@ const ChatBot = () => {
   const [chatHistory, setChatHistory] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // 👈 Set to false initially
-
   useEffect(() => {
     // Add a welcome message from Gemini on first load
     setChatHistory([
       {
         sender: 'gemini',
-        message: "Hi there! I'm your quiz assistant. Ask me anything about the current question or topic!"
+        message: "Hi there! I'm your quiz assistant. Ask me anything about the current question or topic! If you need a hint, just type hint"
       }
     ]);
   }, []);

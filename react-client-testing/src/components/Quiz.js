@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./Quiz.css";
+import axios from 'axios';
 import ChatBot from "./chat"; // Import the ChatBot component
 
 const Quiz = ({ topic }) => {
@@ -11,6 +12,7 @@ const Quiz = ({ topic }) => {
   const [showFeedback, setShowFeedback] = useState(false);
   const [currentResult, setCurrentResult] = useState(null);
   const [aiExplanation, setAiExplanation] = useState("");
+  const [aiHint, setHint] = useState("");
 
   useEffect(() => {
     loadQuestions();
@@ -28,6 +30,7 @@ const Quiz = ({ topic }) => {
       setShowFeedback(false);
       setCurrentResult(null);
       setAiExplanation("");
+      setHint("");
     } catch (err) {
       console.error("Error loading questions:", err);
       alert("Failed to load questions. Is the backend running?");
@@ -70,6 +73,7 @@ const Quiz = ({ topic }) => {
   const handleAnswerSubmit = async () => {
     const question = questions[currentQuestionIndex];
     const userAnswer = answers[question._id];
+    setHint("");
 
     try {
       const res = await fetch("/api/questions/check", {
@@ -100,6 +104,7 @@ const Quiz = ({ topic }) => {
     setShowFeedback(false);
     setAiExplanation("");
     setCurrentResult(null);
+    setHint("");
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(i => i + 1);
     } else {
@@ -110,23 +115,44 @@ const Quiz = ({ topic }) => {
   // explain the answer using AI
   // this function sends the question text, correct answer, and user answer to the AI API
   const explainWithAI = async () => {
-    const questionText = questions[currentQuestionIndex].questionText;
+    const questionText = questions[currentQuestionIndex]?.questionText;  // Use optional chaining in case of undefined
     const correctAnswer = currentResult?.correctAnswer;
-    const userAnswer = currentResult?.userAnswer;
-
+    const userMessage = currentResult?.userAnswer;
+    const query = "Given the question" + questionText + "and the correct answer" + correctAnswer + "and that the user answered" + userMessage + "give one subtile hint to guide them towards the correct answer with no fluff"
+    
     try {
-      const res = await fetch("/api/ai/explain", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questionText, correctAnswer, userAnswer })
-      });
+        const res = await axios.post("http://localhost:3002/chat", {
+            message: query
+        });
 
-      const data = await res.json();
-      setAiExplanation(data.explanation);
+        const data = res.data?.response || "Sorry, AI couldn't generate an explanation.";
+        setAiExplanation(data);
     } catch (err) {
-      setAiExplanation("Sorry, AI couldn't generate an explanation.");
+        setAiExplanation("Sorry, AI couldn't generate an explanation.");
+        console.error("Error explaining with AI:", err);
     }
-  };
+};
+
+ // provide a hint using AI
+  // this function sends the question text and correct answer to the API
+  const hintWithAI = async () => {
+    const questionText = questions[currentQuestionIndex]?.questionText;  // Use optional chaining in case of undefined
+    const correctAnswer = currentResult?.correctAnswer;
+    const query = "Given the question" + questionText + "and the correct answer" + correctAnswer + "give one subtile hint to guide them towards the correct answer with no fluff"
+    
+    try {
+        const res = await axios.post("http://localhost:3002/chat", {
+            message: query
+        });
+
+        const data = res.data?.response || "Sorry, AI couldn't generate a hit.";
+        setHint(data);
+    } catch (err) {
+        setHint("Sorry, AI couldn't generate a hint.");
+        console.error("Error explaining with AI:", err);
+    }
+};
+
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -184,6 +210,21 @@ const Quiz = ({ topic }) => {
                 })}
               </div>
 
+               {/* hint button */}
+            {!showFeedback && !results && (
+          <button
+          onClick={hintWithAI}
+          >
+          Hint
+        </button>
+        )}
+
+        {aiHint && (
+        <div className="ai-hint">
+          <p><strong>AI Hint:</strong> {aiHint}</p>
+        </div>
+        )}
+
               {/* submit button */}
               {!showFeedback && !results && (
                 <button
@@ -223,7 +264,7 @@ const Quiz = ({ topic }) => {
         </AnimatePresence>
       </div>
 
-      {/* display the score after submitting the quiz */}}
+      {/* display the score after submitting the quiz */}
       {results && (
         <div style={{ marginTop: "1rem" }}>
           <pre>
@@ -236,6 +277,7 @@ const Quiz = ({ topic }) => {
             setShowFeedback(false);
             setCurrentResult(null);
             setAiExplanation("");
+            setHint("")
           }}>
             Try Again
           </button>
